@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz Interactif</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1> Quiz</h1>
+  <p>Clique sur le bouton pour commencer le test !</p>
+  <button onclick="lancerQuiz()">Démarrer le Quiz</button>
+
+  <footer>
+    Creat by me 
+  </footer>
+  <script>
+    const QUESTIONS = [
+      ["Quelle est la capitale de Lithuanie ?", "Vilnius"],
+      ["Quelle est la hauteure de plus grand montagne au nord d'afrique?", "4167"],
+      ["Quel le language basique utiliser en DATA SCIENCE  ?", "language R"],
+      ["Combien de planètes dans le système solaire ?", "9"],
+      ["Qui a écrit 'Les Mésirables' ?", "Victor Hugo"]
+    ];
+
+    function lancerQuiz() {
+      let score = 0;
+
+      for (let i = 0; i < QUESTIONS.length; i++) {
+        let question = QUESTIONS[i][0];
+        let reponseCorrecte = QUESTIONS[i][1];
+
+        let reponseUtilisateur = prompt(question);
+
+        if (reponseUtilisateur === null) {
+          alert("Question ignorée.");
+          continue;
+        }
+
+        if (reponseUtilisateur.trim().toLowerCase() === reponseCorrecte.trim().toLowerCase()) {
+          alert(" Réponse juste !");
+          score++;
+        } else {
+          alert(` Réponse fausse ! La bonne réponse est : ${reponseCorrecte}`);
+        }
+      }
+
+      alert(` Vous avez répondu correctement à ${score} question${score !== 1 ? 's' : ''} sur ${QUESTIONS.length} !`);
+    }
+  </script>
+</body>
+</html>

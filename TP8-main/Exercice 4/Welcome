@@ -1,0 +1,135 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion Utilisateur</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #8EC5FC, #E0C3FC);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #4B0082;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #8A2BE2;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4B0082;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #6A0DAD;
+        }
+
+        .message {
+            margin-top: 15px;
+            color: red;
+        }
+
+        .logout {
+            margin-top: 20px;
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: crimson;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .logout:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <?php if (!$est_connecte): ?>
+        <h2>🔐 Connexion</h2>
+        <form method="post">
+            <input type="text" name="username" placeholder="Identifiant" required>
+            <input type="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit">Se connecter</button>
+        </form>
+        <?php if ($message): ?>
+            <div class="message"><?= htmlspecialchars($message) ?></div>
+        <?php endif; ?>
+    <?php else: ?>
+        <h2>👋 Bienvenue, <?= htmlspecialchars($_SESSION['username']) ?> !</h2>
+        <p>Vous êtes connecté avec succès.</p>
+        <a class="logout" href="?logout=1">🔓 Se déconnecter</a>
+    <?php endif; ?>
+</div>
+<?php
+session_start();
+
+// Identifiants définis dans le code
+$utilisateur_valide = "admin";
+$mot_de_passe_valide = "12345";
+
+// Déconnexion
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: auth.php");
+    exit();
+}
+
+// Connexion
+$message = "";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    if ($username === $utilisateur_valide && $password === $mot_de_passe_valide) {
+        $_SESSION['username'] = $username;
+    } else {
+        $message = "❌ Identifiants incorrects. Veuillez réessayer.";
+    }
+}
+
+// Affichage conditionnel : formulaire ou accueil
+$est_connecte = isset($_SESSION['username']);
+?>
+</body>
+</html>
